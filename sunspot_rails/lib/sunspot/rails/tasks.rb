@@ -15,12 +15,6 @@ namespace :sunspot do
   #                                       # batchs of 1000
   # $ rake sunspot:reindex[,Post+Author]  # reindex Post and Author model
   task :reindex, [:batch_size, :models] => [:environment] do |t, args|
-    puts "*Note: the reindex task will remove your current indexes and start from scratch."
-    puts "If you have a large dataset, reindexing can take a very long time, possibly weeks."
-    puts "This is not encouraged if you have anywhere near or over 1 million rows."
-    puts "Are you sure you want to drop your indexes and completely reindex? (y/n)"
-    answer = STDIN.gets.chomp
-    return false if answer == "n"
 
     # Retry once or gracefully fail for a 5xx error so we don't break reindexing
     Sunspot.session = Sunspot::SessionProxy::Retry5xxSessionProxy.new(Sunspot.session)
